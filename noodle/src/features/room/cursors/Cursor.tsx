@@ -38,7 +38,10 @@ export const Cursor = React.memo<ICursorProps>(({ userId }) => {
   const theme = useTheme();
 
   const selectPosition = React.useCallback(
-    (room: RoomStateShape) => room.cursors[userId]?.position ?? { x: 0, y: 0 },
+    (room: RoomStateShape) => ({
+      x: room.cursors[userId]?.position?.x ?? 0,
+      y: (room.cursors[userId]?.position?.y ?? 0) - 55, //Minus some pixel to patch wrong user cursor position
+    }),
     [userId]
   );
   const selectActive = React.useCallback((room: RoomStateShape) => room.cursors[userId]?.active ?? false, [userId]);
