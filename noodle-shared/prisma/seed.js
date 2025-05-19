@@ -1,13 +1,13 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-console.log(
+/* console.log(
   'Migrating database at',
   process.env.DATABASE_URL.replace(
     /postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/,
     'postgres://$1:***@$3:$4/$5',
   ),
-);
+); */
 
 const TEMPLATES = {
   new: require('./seed_data/templates/new.json'),

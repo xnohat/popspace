@@ -8,13 +8,64 @@ Learn more at [PopSpace](https://popspace.io)
 
 ![Hero Shot](README_COVER.png)
 
+# LiveKit Server Docker
+
+Generate file livekit.yaml:
+
+```bash
+docker run --rm \
+    -p 7880:7880 \
+    -p 7881:7881 \
+    -p 7882:7882/udp \
+    -v $PWD/livekit.yaml:/livekit.yaml \
+    livekit/livekit-server \
+    --config /livekit.yaml \
+    --node-ip=127.0.0.1
+```
+
+Run LiveKit Server
+
+```bash
+docker run --rm -p 7880:7880 \
+    -p 7881:7881 \
+    -p 7882:7882/udp \
+    -v $PWD/livekit.yaml:/livekit.yaml \
+    livekit/livekit-server:v0.15.6 \
+    --config /livekit.yaml \
+    --node-ip 127.0.0.1   
+```
+
+# Example .env:
+
+```
+NODE_OPTIONS=--openssl-legacy-provider
+# if you use LiveKit, define the following vars
+REACT_APP_LIVEKIT_ENDPOINT=http://localhost:7880
+LIVEKIT_API_KEY=APIZyzr2sN3d5Zq
+LIVEKIT_SECRET_KEY=esHWyiSvfy7gye0gU2eCueSoeZW14Cz4VtsnflFNlM5e
+# if you use Twilio, define these instead.
+# TWILIO_ACCOUNT_SID
+# TWILIO_API_KEY_SECRET
+# TWILIO_API_KEY_SID
+
+# yes, these have different formats, sorry...
+# NOTE: connection_limit=1 is vital for DATABASE_URL!!
+DATABASE_URL=file:/data/db.sqlite?connection_limit=1
+UNICORN_DATABASE_URL=/data/unicorn.sqlite
+USER_FILES_DIRECTORY=/data/user-files
+WALLPAPERS_DIRECTORY=/data/wallpapers
+PUBLIC_URL=http://localhost:8889s
+```
+
+Notes: path must be absolute
 
 # Quick Start
 
 To install PopSpace you will need:
 
 - An Audio/Video media provider:
-  - A deployed [LiveKit server](https://livekit.io/)
+  - A deployed [LiveKit server](https://livekit.io/) https://gitee.com/edison2018_admin/livekit-server
+  livekit/livekit-server:v0.15.6
   - A LiveKit Cloud account
   - Or, a Twilio account
 ---
@@ -248,3 +299,14 @@ yarn dev
 ```
 
 Or you can run each service individually - refer to the README in each service directory.
+
+# NOTES:
+This source require node v16.16.0 and install dotenv package for load .env to global console
+```bash
+npm install -g dotenv-cli
+nvm install 16.16.0
+nvm use 16.16.0
+
+dotenv yarn dev
+```
+

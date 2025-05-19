@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import Quill from 'quill';
+import Quill from './patched-quill';
 import 'quill/dist/quill.snow.css';
 import Sharedb from 'sharedb/lib/client';
 import richText from 'rich-text';
