@@ -13,14 +13,7 @@ Learn more at [PopSpace](https://popspace.io)
 Generate file livekit.yaml:
 
 ```bash
-docker run --rm \
-    -p 7880:7880 \
-    -p 7881:7881 \
-    -p 7882:7882/udp \
-    -v $PWD/livekit.yaml:/livekit.yaml \
-    livekit/livekit-server \
-    --config /livekit.yaml \
-    --node-ip=127.0.0.1
+docker run --rm -v$PWD:/output livekit/generate --local
 ```
 
 Run LiveKit Server
@@ -54,10 +47,12 @@ DATABASE_URL=file:/data/db.sqlite?connection_limit=1
 UNICORN_DATABASE_URL=/data/unicorn.sqlite
 USER_FILES_DIRECTORY=/data/user-files
 WALLPAPERS_DIRECTORY=/data/wallpapers
-PUBLIC_URL=http://localhost:8889s
+PUBLIC_URL=http://localhost:8888
 ```
 
 Notes: path must be absolute
+
+LiveKit API Key and Secret Key can be found in the livekit.yaml file, and must be update to .env file.
 
 # Quick Start
 
@@ -310,3 +305,8 @@ nvm use 16.16.0
 dotenv yarn dev
 ```
 
+If you have problem with install and build better-sqlite3 , install python venv, activate it and run
+```
+pip install setuptools
+```
+then install better-sqlite3 as normal
