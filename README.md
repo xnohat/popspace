@@ -8,7 +8,7 @@ Learn more at [PopSpace](https://popspace.io)
 
 ![Hero Shot](README_COVER.png)
 
-# LiveKit Server Docker
+# LiveKit Server Docker - FOR LOCAL TESTING ONLY - This will not work in production because LiveKit Server need TURN server for WebRTC
 
 Generate file livekit.yaml:
 
@@ -27,6 +27,10 @@ docker run --rm -p 7880:7880 \
     --config /livekit.yaml \
     --node-ip 127.0.0.1   
 ```
+
+# PRODUCTION MUST USE SEPERATE LIVEKIT SERVER 
+Setup using this guide on a blank VPS
+https://docs.livekit.io/home/self-hosting/vm/
 
 # Example .env:
 

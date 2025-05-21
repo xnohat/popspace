@@ -1,7 +1,7 @@
 services:
   popspace:
-    image: popspace
-    build: .
+    image: xnohat/popspace
+    #build: .
     container_name: popspace
     hostname: popspace
     environment:
@@ -13,7 +13,14 @@ services:
       - USER_FILES_DIRECTORY=/data/user-files
       - WALLPAPERS_DIRECTORY=/data/wallpapers
       - PUBLIC_URL=http://127.0.0.1:8888
-      - APP_PORT=8888
+      - REACT_APP_HOST=127.0.0.1
+      - REACT_APP_PORT=8888
+      - REACT_APP_HERMES_HOST=127.0.0.1
+      - REACT_APP_HERMES_PORT=8890
+      - REACT_APP_API_HOST=127.0.0.1
+      - REACT_APP_API_PORT=8889
+      - REACT_APP_UNICORN_HOST=127.0.0.1
+      - REACT_APP_UNICORN_PORT=8891
     #env_file:
     #  - .env
     ports:
