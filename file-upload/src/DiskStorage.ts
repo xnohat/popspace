@@ -39,7 +39,11 @@ export class DiskStorage implements Storage {
       baseUrlAsUrl.pathname && pathname.startsWith(baseUrlAsUrl.pathname)
         ? pathname.slice(baseUrlAsUrl.pathname.length)
         : pathname;
-    const filePath = `${this.directory}/${pathWithoutBase}`;
+    const dirContainer = pathWithoutBase.split('/').slice(0, -1).join('/');
+    const dirPath = `${this.directory}${dirContainer}`;
+    //const filePath = `${this.directory}/${pathWithoutBase}`;
+    const filePath = `${this.directory}${decodeURIComponent(pathWithoutBase)}`;
     await fs.promises.unlink(filePath);
+    await fs.promises.rmdir(dirPath);
   };
 }
