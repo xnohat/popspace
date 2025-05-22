@@ -1,7 +1,8 @@
 import client from '@api/client';
 import { useRoomStore } from '@api/useRoomStore';
 import { Spacing, SpacingProps } from '@components/Spacing/Spacing';
-import { Box, Card, CardActionArea, CardContent, CardMedia, makeStyles, Typography } from '@material-ui/core';
+import { BasicAuth } from '@components/BasicAuth/BasicAuth';
+import { Box, Card, CardActionArea, CardContent, CardMedia, Dialog, makeStyles, Typography } from '@material-ui/core';
 import globalAudioOnVideo from '@src/videos/global_audio/global.mp4';
 import globalAudioOffVideo from '@src/videos/global_audio/nearby.mp4';
 import clsx from 'clsx';
@@ -10,24 +11,53 @@ import { useTranslation } from 'react-i18next';
 
 export function GlobalAudioToggle(props: SpacingProps) {
   const { t } = useTranslation();
-
   const isGlobalAudioOn = useRoomStore((room) => room.state.isAudioGlobal);
+  const [authAction, setAuthAction] = React.useState<'on' | 'off' | null>(null);
+
+  const handleSetAudioGlobalOff = () => {
+    setAuthAction('off');
+  };
+
+  const handleSetAudioGlobalOn = () => {
+    setAuthAction('on');
+  };
+
+  const handleAuthSuccess = () => {
+    if (authAction === 'off') {
+      client.roomState.setIsAudioGlobal(false);
+    } else if (authAction === 'on') {
+      client.roomState.setIsAudioGlobal(true);
+    }
+    setAuthAction(null);
+  };
+
+  const handleAuthCancel = () => {
+    setAuthAction(null);
+  };
 
   return (
     <Spacing {...props}>
+      {authAction !== null && (
+        <AuthDialog 
+          isOpen={authAction !== null}
+          onSuccess={handleAuthSuccess}
+          onCancel={handleAuthCancel}
+        />
+      )}
+      
       <AudioToggleCard
         title={t('features.mediaControls.globalAudioOffTitle')}
         description={t('features.mediaControls.globalAudioOffDescription')}
         videoSrc={globalAudioOffVideo}
         selected={!isGlobalAudioOn}
-        onClick={() => client.roomState.setIsAudioGlobal(false)}
+        onClick={handleSetAudioGlobalOff}
       />
       <AudioToggleCard
         title={t('features.mediaControls.globalAudioOnTitle')}
         description={t('features.mediaControls.globalAudioOnDescription')}
         videoSrc={globalAudioOnVideo}
         selected={isGlobalAudioOn}
-        onClick={() => client.roomState.setIsAudioGlobal(true)}
+        onClick={handleSetAudioGlobalOn}
       />
     </Spacing>
   );
@@ -88,5 +118,34 @@ function AudioToggleCard({
         </Box>
       </CardActionArea>
     </Card>
+  );
+}
+
+interface AuthDialogProps {
+  isOpen: boolean;
+  onSuccess: () => void;
+  onCancel: () => void;
+}
+
+function AuthDialog({ isOpen, onSuccess, onCancel }: AuthDialogProps) {
+  // Create a component to handle authentication success
+  const AuthSuccessHandler = () => {
+    // Use useEffect to call onSuccess after the component mounts
+    // This ensures that BasicAuth has successfully authenticated
+    React.useEffect(() => {
+      onSuccess();
+    }, []);
+    
+    return null; // This component doesn't render anything
+  };
+
+  return (
+    <Dialog open={isOpen} onClose={onCancel}>
+      <Box p={3} minWidth={300} minHeight={100} display="flex" justifyContent="center" alignItems="center">
+        <BasicAuth>
+          <AuthSuccessHandler />
+        </BasicAuth>
+      </Box>
+    </Dialog>
   );
 }
