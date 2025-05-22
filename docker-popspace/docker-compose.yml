@@ -21,6 +21,8 @@ services:
       - REACT_APP_API_PORT=443 #8889
       - REACT_APP_UNICORN_HOST=work-unicorn.360of.me
       - REACT_APP_UNICORN_PORT=443 #8891
+      - REACT_APP_AUTH_USER=admin
+      - REACT_APP_AUTH_PASSWORD=admin
     #env_file:
     #  - .env
     ports:

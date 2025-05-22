@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import { AdminRoute } from './components/AdminRoute/AdminRoute';
+import { withBasicAuth } from './components/BasicAuth/BasicAuth';
 import { RouteNames } from './constants/RouteNames';
 import { Page } from './Layouts/Page/Page';
 import { MeetingLink } from './pages/MeetingLink/MeetingLink';
@@ -22,7 +23,7 @@ export const Routes: React.FC<IRoutesProps> = () => {
       <Route exact path={RouteNames.ROOT}>
         <Redirect to="/create" />
       </Route>
-      <Route exact path={RouteNames.CREATE_MEETING} component={MeetingSelect} />
+      <Route exact path={RouteNames.CREATE_MEETING} component={withBasicAuth(MeetingSelect)} />
 
       <Route exact path={RouteNames.MEETING_LINK} component={MeetingLink} />
 
