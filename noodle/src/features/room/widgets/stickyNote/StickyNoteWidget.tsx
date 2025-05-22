@@ -14,6 +14,7 @@ import { useWidgetContext } from '../useWidgetContext';
 import { WidgetTitlebarButton } from '../WidgetTitlebarButton';
 import { EditIcon } from '@components/icons/EditIcon';
 import { DoneIcon } from '@components/icons/DoneIcon';
+import { SaveIcon } from '@components/icons/SaveIcon';
 import { ThemeName } from '../../../../theme/theme';
 import { Analytics } from '@analytics/Analytics';
 import { useRoomStore } from '@api/useRoomStore';
@@ -93,6 +94,19 @@ export const StickyNoteWidget: React.FC<IStickyNoteWidgetProps> = () => {
     });
   };
 
+  const handleExport = () => {
+    const html = state.widgetState.text;
+    const blob = new Blob([html], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Untitled.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <WidgetFrame
       color={state.widgetState.color ?? ThemeName.Mandarin}
@@ -118,6 +132,9 @@ export const StickyNoteWidget: React.FC<IStickyNoteWidgetProps> = () => {
             <DoneIcon />
           </WidgetTitlebarButton>
         )}
+        <WidgetTitlebarButton onClick={handleExport} aria-label={t('widgets.whiteboard.export')}>
+          <SaveIcon fontSize="inherit" color="inherit" />
+        </WidgetTitlebarButton>
       </WidgetEditableTitlebar>
       <StickyNoteContent editing={editing} setEditing={setEditing} isOwnedByLocalUser={isOwnedByLocalUser} />
       <WidgetResizeHandle />

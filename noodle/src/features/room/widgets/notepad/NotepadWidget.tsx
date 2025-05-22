@@ -14,6 +14,8 @@ import { ThemeName } from '../../../../theme/theme';
 import { useWidgetContext } from '../useWidgetContext';
 import { WidgetContent } from '../WidgetContent';
 import { WidgetEditableTitlebar } from '../WidgetEditableTitlebar';
+import { WidgetTitlebarButton } from '../WidgetTitlebarButton';
+import { SaveIcon } from '@components/icons/SaveIcon';
 import { WidgetFrame } from '../WidgetFrame';
 import { WidgetScrollPane } from '../WidgetScrollPane';
 import { MAX_SIZE, MIN_SIZE, TITLEBAR_HEIGHT } from './constants';
@@ -122,6 +124,21 @@ export const NotepadWidget: React.FC<INotepadWidgetProps> = () => {
 
   const isNotOwner = !useIsMe(state.creatorId);
 
+  const handleExport = () => {
+    const quill = quillRef.current;
+    if (!quill) return;
+    const html = quill.root.innerHTML;
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Untitled.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <WidgetFrame
       color={state.widgetState.color ?? ThemeName.Blueberry}
@@ -136,7 +153,11 @@ export const NotepadWidget: React.FC<INotepadWidgetProps> = () => {
         defaultTitle={t('widgets.notepad.title')}
         setActiveColor={onColorPicked}
         activeColor={state.widgetState.color ?? ThemeName.Blueberry}
-      ></WidgetEditableTitlebar>
+      >
+        <WidgetTitlebarButton onClick={handleExport} aria-label={t('widgets.whiteboard.export')}>
+          <SaveIcon fontSize="inherit" color="inherit" />
+        </WidgetTitlebarButton>
+      </WidgetEditableTitlebar>
       <WidgetContent disablePadding className={classes.content}>
         <WidgetScrollPane className={classes.scrollContainer} onClick={focusOnClick} style={{ cursor: 'pointer' }}>
           <div className={clsx('notepad_selector', classes.notepadContainer)}>

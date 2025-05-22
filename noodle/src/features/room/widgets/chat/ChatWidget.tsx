@@ -14,6 +14,8 @@ import { WidgetContent } from '../WidgetContent';
 import { WidgetFrame } from '../WidgetFrame';
 import { WidgetScrollPane } from '../WidgetScrollPane';
 import { WidgetEditableTitlebar } from '../WidgetEditableTitlebar';
+import { WidgetTitlebarButton } from '../WidgetTitlebarButton';
+import { SaveIcon } from '@components/icons/SaveIcon';
 import { MAX_SIZE, MIN_SIZE } from './constants';
 import ChatBubbleImg from './images/chat_placeholder.png';
 import { ChatMenu } from './menu/ChatMenu';
@@ -141,6 +143,20 @@ export const ChatWidget: React.FC<IChatWidgetProps> = () => {
     });
   };
 
+  const handleExport = () => {
+    console.log('Messages:', state.messages.messageList);
+    const html = state.messages.messageList.map((message) => `${message.sender.displayName} (${message.createdAt}): ${message.content}`).join('\n');
+    const blob = new Blob([html], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Untitled.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <WidgetFrame
       color={state.widgetState.color ?? ThemeName.Blueberry}
@@ -157,6 +173,9 @@ export const ChatWidget: React.FC<IChatWidgetProps> = () => {
         setActiveColor={onColorPicked}
         activeColor={state.widgetState.color ?? ThemeName.Blueberry}
       >
+        <WidgetTitlebarButton onClick={handleExport} aria-label={t('widgets.whiteboard.export')}>
+          <SaveIcon fontSize="inherit" color="inherit" />
+        </WidgetTitlebarButton>
         <ChatMenu />
       </WidgetEditableTitlebar>
       <WidgetContent enableTextSelection>
