@@ -4,6 +4,7 @@ import { Spacing } from '@components/Spacing/Spacing';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import { AuthenticatedFileUploadButton } from '@components/FileUploadButton/AuthenticatedFileUploadButton';
 
 import { useWallpapers } from './useWallpapers';
 
@@ -30,7 +31,7 @@ export const CustomWallpaperForm: React.FC<ICustomWallpaperFormProps> = () => {
 
   return (
     <Spacing flexDirection="column">
-      <FileUploadButton loading={!!file} value={file} onChange={onSubmit} accept=".JPG, .JPEG, .PNG, .WebP" />
+      <AuthenticatedFileUploadButton loading={!!file} value={file} onChange={onSubmit} accept=".JPG, .JPEG, .PNG, .WebP" />
     </Spacing>
   );
 };

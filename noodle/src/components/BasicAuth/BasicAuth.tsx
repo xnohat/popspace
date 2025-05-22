@@ -135,3 +135,14 @@ export const withBasicAuth = <P extends RouteComponentProps>(
     </BasicAuth>
   );
 };
+
+// HOC for non-route components that need authentication
+export const withComponentAuth = <P,>(
+  Component: React.ComponentType<P>
+): React.ComponentType<P> => {
+  return (props) => (
+    <BasicAuth>
+      <Component {...props} />
+    </BasicAuth>
+  );
+};
